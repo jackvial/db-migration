@@ -1,1 +1,1 @@
-select * from blah;
+select 5 + 7;
