@@ -4,7 +4,12 @@
 class Migrate {
 
     public function gitDiff(){
-       $new_files = shell_exec('git diff HEAD^ HEAD --name-only includes/'); 
+        return shell_exec('git diff HEAD^ HEAD --name-only includes/');
+    }
+
+    public function splitOnNewLine($file_names)
+    {
+        return preg_split('/[\n\r]+/', $file_names, -1, PREG_SPLIT_NO_EMPTY);
     }
 
     public function init(){
