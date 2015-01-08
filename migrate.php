@@ -11,6 +11,15 @@ class Migrate {
     {
         return preg_split('/[\n\r]+/', $file_names, -1, PREG_SPLIT_NO_EMPTY);
     }
+    
+    public function mapFileTimeStamps($files_array)
+    {
+        $time_stamped = array();
+        foreach($files_array as $key => $file_name){
+            $time_stamped[date("H:i:s d/m/y", filemtime($file_name))] = $file_name;
+        }
+        return $time_stamped;
+    }
 
     public function init(){
         return 'is alive!';
