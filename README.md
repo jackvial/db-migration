@@ -12,4 +12,5 @@ composer install
 Run: 
 ```bash
 vendors/bin/codecept run
-``` from root directory
+``` 
+from the project root directory
