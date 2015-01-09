@@ -21,8 +21,10 @@ class Migrate {
         return $time_stamped;
     }
 
-    public function init(){
-        return 'is alive!';
+    public function sortBykey($assocArray)
+    {
+        $sortedArray = ksort($assocArray);
+        return $sortedArray;
     }
 }
 ?>
