@@ -4,6 +4,12 @@ DB Migration Script [![Build Status](https://travis-ci.org/jackvial/db-migration
 - Can be triggered a git hook such as post-receive 
 
 ### Setup
-- Run ```composer install```
+Run: 
+```bash 
+composer install
+```
 ### Run Tests
-- Run ```vendors/bin/codecept run``` from root directory
+Run: 
+```bash
+vendors/bin/codecept run
+``` from root directory
