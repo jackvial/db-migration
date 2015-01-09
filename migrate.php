@@ -16,15 +16,17 @@ class Migrate {
     {
         $time_stamped = array();
         foreach($files_array as $key => $file_name){
-            $time_stamped[date("H:i:s d/m/y", filemtime($file_name))] = $file_name;
+            $timeStamp = (int) date("ymdHis", filemtime($file_name));
+            $time_stamped[$timeStamp] = $file_name;
         }
         return $time_stamped;
     }
 
     public function sortBykey($assocArray)
     {
-        $sortedArray = ksort($assocArray);
-        return $sortedArray;
+        // Sport assoc array in place, returns boolean
+        ksort($assocArray, SORT_STRING);
+        return $assocArray;
     }
 }
 ?>
