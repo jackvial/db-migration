@@ -1,3 +1,3 @@
 # db-migration
-https://travis-ci.org/jackvial/db-migration.svg
+[![Build Status](https://travis-ci.org/jackvial/db-migration.svg)](https://travis-ci.org/jackvial/db-migration)
 A script that checks for and runs new db migrations
