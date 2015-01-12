@@ -11,10 +11,10 @@ matrix:
 
 branches:
   except:
-    - gh-pages
+  - gh-pages
 
 before_script:
-	- composer install
+  - composer install
   - ./vendor/bin/codecept build
 
 script:
