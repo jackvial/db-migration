@@ -64,6 +64,7 @@ class Migrate {
         $fileNames = $this->gitDiff();
         $fileNamesArray = $this->splitOnNewLine($fileNames);
         $timeStampedArray = $this->sortBykey($this->mapFileTimeStamps($fileNamesArray));
+        $this->connectToDb();
         return $timeStampedArray;
     }
 }
