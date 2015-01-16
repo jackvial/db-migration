@@ -72,7 +72,7 @@ class Migrate {
         $prefixes = array();
         preg_match_all('!\d+!', $file, $prefixes);
         $prefixNum = implode(' ', $prefixes[0]); 
-        return $prefixNum;
+        return (int)$prefixNum;
 
     }
     
@@ -88,7 +88,6 @@ class Migrate {
             $prefixes_assoc[$prefix] = $file_name;
         }
 
-        //print_r($time_stamped);
         return $prefixes_assoc;
     }
 

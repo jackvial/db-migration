@@ -74,4 +74,37 @@ class MigrateTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(isAssoc($this->migrate->sortByKey($input)));
     }
 
+    public function testGetNumberPrefix()
+    {
+        $file_path = 'includes/34_scripts.sql';
+
+        $this->assertInternalType("int", $this->migrate->getNumberPrefix($file_path));
+        $this->assertEquals($this->migrate->getNumberPrefix($file_path), 34);
+    }
+
+    public function testFilterByStatus()
+    {
+        $file_names = array('A     test_includes/8_test_query.sql', 
+                            'A     test_includes/9_test_query.sql',
+                            'D     test_includes/10_test_query.sql');
+
+        $expected_result = array('A     test_includes/8_test_query.sql', 
+                                'A     test_includes/9_test_query.sql');
+
+
+        $this->assertEquals($this->migrate->filterByStatus('A', $file_names), $expected_result);
+    }
+
+    public function testStripStatus()
+    {
+        $file_names = array('A     test_includes/8_test_query.sql', 
+                            'A     test_includes/9_test_query.sql');
+
+        $expected_result = array('test_includes/8_test_query.sql', 
+                                'test_includes/9_test_query.sql');
+
+
+        $this->assertEquals($this->migrate->stripStatus($file_names), $expected_result);
+    }
+
 }
