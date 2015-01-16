@@ -5,9 +5,9 @@
     1. Diff includes/ to check for new scripts since last commit
     2. Split the file names into an array
     3. Filter files by status
-    4. Get the timstamps of the new files and assign them as the keys of an assoc array
+    4. Get the prefix number of the new files and assign them as the keys of an assoc array
         with the files paths as the values
-    5. Sort by keys to get chronological order
+    5. Sort by keys
     6. Connect to the database
     7. Run each of the scripts against the database
     8. Log that the scripts have been succesfully run or if any errors occurred
