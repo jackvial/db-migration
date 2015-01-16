@@ -3,6 +3,8 @@
 
 class Migrate {
 
+    protected $dbconn;
+
     public function gitDiff(){
         return shell_exec('git diff HEAD^ HEAD --name-only includes/');
     }
@@ -28,5 +30,25 @@ class Migrate {
         ksort($assocArray, SORT_STRING);
         return $assocArray;
     }
+
+    public function connectToDb()
+    {
+        try {
+            $conn = new PDO('mysql:host=localhost;dbname=migration_scripts', 'root', 'Welcome1');
+    
+        } catch (PDOException $e) {
+            print "Error!: " . $e->getMessage() . "<br/>";
+            die();
+        }
+
+        $this->db = $conn;
+    }
+
+    public function getConnection(){
+        return $this->db;
+    }
 }
+
+$migrate = new Migrate();
+$migrate->gitDiff();
 ?>
