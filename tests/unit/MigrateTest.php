@@ -30,34 +30,31 @@ class MigrateTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($this->migrate->splitOnNewLine($this->migrate->gitDiff()))); 
     }
     
-    public function testMapFileTimeStamps()
+    public function testMapFilePrefix()
     {
-        $file_names = array('test_includes/test_query_8.sql', 
-                            'test_includes/test_query_9.sql',
-                            'test_includes/test_query_10.sql');
+        $file_names = array('test_includes/8_test_query.sql', 
+                            'test_includes/9_test_query.sql',
+                            'test_includes/10_test_query.sql');
 
-        /*
-        $expected_result =  array('22:33:47 07/01/15' => 'includes/update_tables.sql',
-                                  '19:18:12 07/01/15' => 'includes/insert_fruit.sql');
-        */
-        $expected_result =  array(150116101020 => 'test_includes/test_query_8.sql',
-                                  150107223347 => 'test_includes/test_query_9.sql',
-                                  150107191812 => 'test_includes/test_query_10.sql');
 
-        $this->assertEquals($this->migrate->mapFileTimeStamps($file_names), $expected_result);
+        $expected_result =  array(8 => 'test_includes/8_test_query.sql',
+                                  9 => 'test_includes/9_test_query.sql',
+                                  10 => 'test_includes/10_test_query.sql');
+
+        $this->assertEquals($this->migrate->mapFilePrefix($file_names), $expected_result);
     }
 
     public function testSortByKey()
     {
-        $input =  array(151109231433 => 'includes/update_tables.sql',
-                        131109111343 => 'includes/insert_fruit.sql',
-                        150701121812 => 'includes/drop_columns.sql',
-                        120906230101 => 'includes/drop_zone.sql');
+        $input =  array(22 => 'includes/22_update_tables.sql',
+                        11 => 'includes/11_insert_fruit.sql',
+                        13 => 'includes/13_drop_columns.sql',
+                        9 => 'includes/9_drop_zone.sql');
 
-        $expected_result = array(120906230101 => 'includes/drop_zone.sql',
-                                131109111343 => 'includes/insert_fruit.sql',
-                                150701121812 => 'includes/drop_columns.sql',
-                                151109231433 => 'includes/update_tables.sql',);
+        $expected_result = array(9 => 'includes/9_drop_zone.sql',
+                                11 => 'includes/11_insert_fruit.sql',
+                                13 => 'includes/13_drop_columns.sql',
+                                22 => 'includes/22_update_tables.sql',);
 
         $this->assertTrue(is_array($this->migrate->sortByKey($input)));
         $this->assertSame($this->migrate->sortByKey($input), $expected_result);

@@ -65,30 +65,38 @@ class Migrate {
             
         return $result;
     }
+
+    public function getNumberPrefix($file)
+    {
+        // Find and return the number prefix
+        $prefixes = array();
+        preg_match_all('!\d+!', $file, $prefixes);
+        $prefixNum = implode(' ', $prefixes[0]); 
+        return $prefixNum;
+
+    }
     
-    // Assign the timestamp of each file as the key of a new array
+    // Assign the prefix of each file as the key of a new array
     // with the file path as the value
-    public function mapFileTimeStamps($files_array)
+    public function mapFilePrefix($files_array)
     {
 
         //$data[$item['id']]=$item['label'];
-        $time_stamped = array();
+        $prefixes_assoc = array();
         foreach($files_array as $key => $file_name){
-            $timeStamp = $this->getFileFirstCommitDate($file_name);
-            print_r($timeStamp);
-            $time_stamped[$timeStamp] = $file_name;
-            print_r($file_name);
+            $prefix = $this->getNumberPrefix($file_name);
+            $prefixes_assoc[$prefix] = $file_name;
         }
 
         //print_r($time_stamped);
-        return $time_stamped;
+        return $prefixes_assoc;
     }
 
     // Sort by key to get chronological order
     public function sortBykey($assocArray)
     {
         // Sport assoc array in place, returns boolean
-        ksort($assocArray, SORT_STRING);
+        ksort($assocArray, SORT_NUMERIC);
         return $assocArray;
     }
 
@@ -122,7 +130,7 @@ class Migrate {
 
             $date = new DateTime();
             $date = (string)$date->format('Y-m-d H:i:s');
-            file_put_contents("finished_scripts.txt", $date ."    ". $fileName."\n", FILE_APPEND);      
+            file_put_contents("migration_log.txt", $date ."    ". $fileName."\n", FILE_APPEND);      
         }
     }
 
@@ -132,12 +140,8 @@ class Migrate {
         $fileNamesArray = $this->splitOnNewLine($fileNames);
         $newFiles = $this->filterByStatus('A',$fileNamesArray);
         $statusTrimmed = $this->stripStatus($newFiles);
-        print_r($statusTrimmed);
-        $keysMapped = $this->mapFileTimeStamps($statusTrimmed);
-        print_r($keysMapped);
-        $timeStampedArray = $this->sortBykey($keysMapped);
-        print_r($timeStampedArray);
-        $this->runScripts($timeStampedArray);
+        $prefixedAssoc = $this->sortByKey($this->mapFilePrefix($statusTrimmed));
+        $this->runScripts($prefixedAssoc);
     }
 }
 
