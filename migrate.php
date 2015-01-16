@@ -4,12 +4,13 @@
 /* 
     1. Diff includes/ to check for new scripts since last commit
     2. Split the file names into an array
-    3. Get the timstamps of the new files and assign them as the keys of an assoc array
+    3. Filter files by status
+    4. Get the timstamps of the new files and assign them as the keys of an assoc array
         with the files paths as the values
-    4. Sort by keys to get chronological order
-    5. Connect to the database
-    6. Run each of the scripts against the database
-    7. Log that the scripts have been succesfully run or if any errors occurred
+    5. Sort by keys to get chronological order
+    6. Connect to the database
+    7. Run each of the scripts against the database
+    8. Log that the scripts have been succesfully run or if any errors occurred
 */
 
 class Migrate {
@@ -17,12 +18,28 @@ class Migrate {
     protected $dbconn;
 
     public function gitDiff(){
-        return shell_exec('git diff HEAD^ HEAD --name-only includes/');
+        return shell_exec('git diff HEAD^ HEAD --name-status includes/');
     }
 
     public function splitOnNewLine($file_names)
     {
         return preg_split('/[\n\r]+/', $file_names, -1, PREG_SPLIT_NO_EMPTY);
+    }
+
+    public function filterByStatus($filesArray)
+    {
+        $newFiles = array_filter($filesArray, function($item){
+            return $item[0] == 'A';
+        });
+        print_r($newFiles);
+        return $newFiles;
+    }
+
+    public function stripStatus($filesNames)
+    {
+        foreach($filesNames as $key => $fileName){
+            
+        }
     }
     
     public function mapFileTimeStamps($files_array)
@@ -63,12 +80,13 @@ class Migrate {
     {
         $fileNames = $this->gitDiff();
         $fileNamesArray = $this->splitOnNewLine($fileNames);
-        $timeStampedArray = $this->sortBykey($this->mapFileTimeStamps($fileNamesArray));
+        $newFiles = $this->filterByStatus($fileNamesArray);
+        $timeStampedArray = $this->sortBykey($this->mapFileTimeStamps($newFiles));
         $this->connectToDb();
         return $timeStampedArray;
     }
 }
 
 $migrate = new Migrate();
-print_r($migrate->init());
+$migrate->init();
 ?>
