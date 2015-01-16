@@ -32,14 +32,17 @@ class MigrateTest extends \PHPUnit_Framework_TestCase
     
     public function testMapFileTimeStamps()
     {
-        $file_names = array('includes/update_tables.sql', 'includes/insert_fruit.sql');
+        $file_names = array('test_includes/test_query_8.sql', 
+                            'test_includes/test_query_9.sql',
+                            'test_includes/test_query_10.sql');
 
         /*
         $expected_result =  array('22:33:47 07/01/15' => 'includes/update_tables.sql',
                                   '19:18:12 07/01/15' => 'includes/insert_fruit.sql');
         */
-        $expected_result =  array(150107223347 => 'includes/update_tables.sql',
-                                  150107191812 => 'includes/insert_fruit.sql');
+        $expected_result =  array(150116101020 => 'test_includes/test_query_8.sql',
+                                  150107223347 => 'test_includes/test_query_9.sql',
+                                  150107191812 => 'test_includes/test_query_10.sql');
 
         $this->assertEquals($this->migrate->mapFileTimeStamps($file_names), $expected_result);
     }

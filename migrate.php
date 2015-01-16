@@ -21,11 +21,22 @@ class Migrate {
     // in the format:
     //   "A    includes/my_script.sql"
     //   "D    includes/my_script_old.sql"
-    // where "A" is added and "D" is deleted
+    //   "M    includes/my_script_old.sql"
+    // where "A" is added,  "D" is deleted and "M" is modified
     public function gitDiff(){
         return shell_exec('git diff HEAD^ HEAD --name-status includes/');
     }
 
+    public function getFirstCommitHashCode($file)
+    {
+        return shell_exec('git rev-list HEAD '.$file.' | tail -n 1');
+    }
+
+    public function getFileFirstCommitDate($file)
+    {
+        $firstCommitHash = $this->getFirstCommitHashCode($file);
+        return shell_exec('git show -s --format="%ci" ' .$firstCommitHash);
+    }
     // Split the output of gitDiff into an array
     public function splitOnNewLine($file_names)
     {
@@ -40,7 +51,6 @@ class Migrate {
         $newFiles = array_filter($filesArray, function($item) use($status){
             return $item[0] == $status;
         });
-        print_r($newFiles);
         return $newFiles;
     }
 
@@ -60,11 +70,17 @@ class Migrate {
     // with the file path as the value
     public function mapFileTimeStamps($files_array)
     {
+
+        //$data[$item['id']]=$item['label'];
         $time_stamped = array();
         foreach($files_array as $key => $file_name){
-            $timeStamp = (int) date("ymdHis", filemtime($file_name));
+            $timeStamp = $this->getFileFirstCommitDate($file_name);
+            print_r($timeStamp);
             $time_stamped[$timeStamp] = $file_name;
+            print_r($file_name);
         }
+
+        //print_r($time_stamped);
         return $time_stamped;
     }
 
@@ -116,7 +132,11 @@ class Migrate {
         $fileNamesArray = $this->splitOnNewLine($fileNames);
         $newFiles = $this->filterByStatus('A',$fileNamesArray);
         $statusTrimmed = $this->stripStatus($newFiles);
-        $timeStampedArray = $this->sortBykey($this->mapFileTimeStamps($statusTrimmed));
+        print_r($statusTrimmed);
+        $keysMapped = $this->mapFileTimeStamps($statusTrimmed);
+        print_r($keysMapped);
+        $timeStampedArray = $this->sortBykey($keysMapped);
+        print_r($timeStampedArray);
         $this->runScripts($timeStampedArray);
     }
 }
