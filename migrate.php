@@ -1,6 +1,17 @@
 #!/usr/bin/php
 <?php
 
+/* 
+    1. Diff includes/ to check for new scripts since last commit
+    2. Split the file names into an array
+    3. Get the timstamps of the new files and assign them as the keys of an assoc array
+        with the files paths as the values
+    4. Sort by keys to get chronological order
+    5. Connect to the database
+    6. Run each of the scripts against the database
+    7. Log that the scripts have been succesfully run or if any errors occurred
+*/
+
 class Migrate {
 
     protected $dbconn;
@@ -47,8 +58,16 @@ class Migrate {
     public function getConnection(){
         return $this->db;
     }
+
+    public function init()
+    {
+        $fileNames = $this->gitDiff();
+        $fileNamesArray = $this->splitOnNewLine($fileNames);
+        $timeStampedArray = $this->sortBykey($this->mapFileTimeStamps($fileNamesArray));
+        return $timeStampedArray;
+    }
 }
 
 $migrate = new Migrate();
-$migrate->gitDiff();
+print_r($migrate->init());
 ?>
