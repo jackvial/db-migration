@@ -13,4 +13,11 @@ Run:
 ```bash
 vendors/bin/codecept run
 ``` 
-from the project root directory
+from the project root directory.
+
+
+### Naming Migration Files
+All migration files must be prefixed with a number so that they run in the correct order:
+```bash 
+includes/22_migration_script.sql
+```
