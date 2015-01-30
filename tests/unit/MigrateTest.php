@@ -111,7 +111,7 @@ class MigrateTest extends \PHPUnit_Framework_TestCase
     public function testGetFirstCommitHashCode()
     {
         $file_name = 'test_includes/insert_fruit.sql';
-        $expected_result = '2d9afdfb9e2fa9b349312734b462bb7d57a684ee';
+        $expected_result = '1f56022dee94fbe7b041acfd38d77837e847fab5';
 
         $this->assertEquals($this->migrate->getFirstCommitHashCode($file_name), $expected_result);
     }
@@ -119,7 +119,7 @@ class MigrateTest extends \PHPUnit_Framework_TestCase
     public function testGetFileFirstCommitDate()
     {
         $file_name = 'test_includes/insert_fruit.sql';
-        $expected_result = '1421437899';
+        $expected_result = '1422637654';
 
         $this->assertInternalType('string', $this->migrate->GetFileFirstCommitDate($file_name));
         $this->assertEquals($this->migrate->GetFileFirstCommitDate($file_name), $expected_result);
@@ -127,14 +127,14 @@ class MigrateTest extends \PHPUnit_Framework_TestCase
 
     public function testMapTimeStampToKey()
     {
-        $this->markTestSkipped('must be revisited.');
-        $file_names = array('test_includes/8_test_query.sql', 
-                            'test_includes/9_test_query.sql',
-                            'test_includes/10_test_query.sql');
 
-        $expected_result =  array(14214378990 => 'test_includes/8_test_query.sql',
-                                14214378991 => 'test_includes/9_test_query.sql',
-                                14214378992 => 'test_includes/10_test_query.sql');
+        $file_names = array('test_includes/drop_fruit.sql', 
+                            'test_includes/insert_fruit.sql',
+                            'test_includes/update_fruit.sql');
+
+        $expected_result =  array(14226376540 => 'test_includes/drop_fruit.sql',
+                                14226376541 => 'test_includes/insert_fruit.sql',
+                                14226376542 => 'test_includes/update_fruit.sql');
 
         $this->assertEquals($this->migrate->mapTimeStampToKey($file_names), $expected_result);
     }

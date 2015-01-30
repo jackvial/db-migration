@@ -1,8 +1,8 @@
 INSERT INTO fruit (name, color)
-VALUES ('cabbage', 'green');
+VALUES ('plum', 'puple');
 
 INSERT INTO fruit (name, color)
-VALUES ('undefined', 'undefined has no color');
+VALUES ('orange', 'orange');
 
 INSERT INTO fruit (name, color)
 VALUES ('tomato', 'red');
