@@ -107,4 +107,21 @@ class MigrateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->migrate->stripStatus($file_names), $expected_result);
     }
 
+    public function testGetFirstCommitHashCode()
+    {
+        $file_name = 'test_includes/9_test_query.sql';
+        $expected_result = '2d9afdfb9e2fa9b349312734b462bb7d57a684ee';
+
+        $this->assertEquals($this->migrate->getFirstCommitHashCode($file_name), $expected_result);
+    }
+
+    public function testGetFileFirstCommitDate()
+    {
+        $file_name = 'test_includes/9_test_query.sql';
+        $expected_result = 1421437899;
+
+        $this->assertInternalType('int', $this->migrate->GetFileFirstCommitDate($file_name));
+        $this->assertEquals($this->migrate->GetFileFirstCommitDate($file_name), $expected_result);
+    }
+
 }
