@@ -43,8 +43,8 @@ class Migrate {
         $firstCommitHash = $this->getFirstCommitHashCode($file);
         $unixTimeStamp = shell_exec('git show -s --format="%at" ' .$firstCommitHash);
 
-        // Strip whitespace and cast to int
-        return (int)preg_replace('/\s+/', '', $unixTimeStamp);
+        // Strip whitespace
+        return preg_replace('/\s+/', '', $unixTimeStamp);
     }
     // Split the output of gitDiff into an array
     public function splitOnNewLine($file_names)
@@ -92,12 +92,28 @@ class Migrate {
 
         //$data[$item['id']]=$item['label'];
         $prefixes_assoc = array();
-        foreach($files_array as $key => $file_name){
+        foreach($files_array as $key => $file_name) {
             $prefix = $this->getNumberPrefix($file_name);
             $prefixes_assoc[$prefix] = $file_name;
         }
 
         return $prefixes_assoc;
+    }
+
+    public function mapTimeStampToKey($files_array)
+    {
+        $timestamps_assoc = array();
+        foreach($files_array as $key => $file_name){
+            $timeStamp = $this->getFileFirstCommitDate($file_name);
+
+            // Append they key to make timestamps or files commited together unique
+            // Cast the $key to string to concatenate then cast the new string to an int
+            // The timestamp needs to be an int to be sorted correctly
+            $timeStamp = (int)$timeStamp . (string)$key;
+            $timestamps_assoc[$timeStamp] = $file_name;
+        }
+
+        return $timestamps_assoc;
     }
 
     // Sort by key to get chronological order
@@ -147,13 +163,13 @@ class Migrate {
     {
         $fileNames = $this->gitDiff();
         $fileNamesArray = $this->splitOnNewLine($fileNames);
-        $newFiles = $this->filterByStatus('A',$fileNamesArray);
+        $newFiles = $this->filterByStatus('A', $fileNamesArray);
         $statusTrimmed = $this->stripStatus($newFiles);
-        $prefixedAssoc = $this->sortByKey($this->mapFilePrefix($statusTrimmed));
+        $prefixedAssoc = $this->sortByKey($this->mapTimeStampToKey($statusTrimmed));
         $this->runScripts($prefixedAssoc);
     }
 }
 
-//$migrate = new Migrate();
-//$migrate->init();
+$migrate = new Migrate();
+$migrate->init();
 ?>
