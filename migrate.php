@@ -1,41 +1,48 @@
 #!/usr/bin/php
 <?php
 
-/* 
-    1. Diff includes/ to check for new scripts since last commit
-    2. Split the file names into an array
-    3. Filter files by status
-    4. Get the prefix number of the new files and assign them as the keys of an assoc array
-        with the files paths as the values
-    5. Sort by keys
-    6. Connect to the database
-    7. Run each of the scripts against the database
-    8. Log that the scripts have been succesfully run or if any errors occurred
-*/
+/**
+  *  1. Diff includes/ to check for new scripts since last commit
+  *  2. Split the file names into an array
+  *  3. Filter files by status
+  *  4. Get the prefix number of the new files and assign them as the keys of an assoc array
+  *      with the files paths as the values
+  *  5. Sort by keys
+  *  6. Connect to the database
+  *  7. Run each of the scripts against the database
+  *  8. Log that the scripts have been succesfully run or if any errors occurred
+  */
 
 class Migrate {
 
     protected $dbconn;
 
-    // Returns a list of files that have been changed since the last commit
-    // in the format:
-    //   "A    includes/my_script.sql"
-    //   "D    includes/my_script_old.sql"
-    //   "M    includes/my_script_old.sql"
-    // where "A" is added,  "D" is deleted and "M" is modified
-    public function gitDiff(){
+    /** Returns a list of files that have been changed since the last commit
+     *  in the format:
+     *  "A    includes/my_script.sql"
+     *  "D    includes/my_script_old.sql"
+     *  "M    includes/my_script_old.sql"
+     *  where "A" is added,  "D" is deleted and "M" is modified
+     */
+
+    public function gitDiff()
+    {
         return shell_exec('git diff HEAD^ HEAD --name-status includes/');
     }
 
     public function getFirstCommitHashCode($file)
-    {
-        return shell_exec('git rev-list HEAD '.$file.' | tail -n 1');
+    {   
+        $hashCode = shell_exec('git rev-list HEAD '.$file.' | tail -n 1');
+        
+        // Strip all white space
+        return preg_replace('/\s+/', '', $hashCode);
     }
 
     public function getFileFirstCommitDate($file)
     {
         $firstCommitHash = $this->getFirstCommitHashCode($file);
-        return shell_exec('git show -s --format="%ci" ' .$firstCommitHash);
+        $unixTimeStamp = shell_exec('git show -s --format="%at" ' .$firstCommitHash);
+        return preg_replace('/\s+/', '', $unixTimeStamp);
     }
     // Split the output of gitDiff into an array
     public function splitOnNewLine($file_names)
@@ -103,6 +110,7 @@ class Migrate {
     public function connectToDb()
     {
         try {
+
             $conn = new PDO('mysql:host=localhost;dbname=migration_scripts', 'root', 'Welcome1');
     
         } catch (PDOException $e) {
@@ -144,6 +152,6 @@ class Migrate {
     }
 }
 
-$migrate = new Migrate();
-$migrate->init();
+//$migrate = new Migrate();
+//$migrate->init();
 ?>
