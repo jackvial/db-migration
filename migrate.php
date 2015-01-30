@@ -42,7 +42,9 @@ class Migrate {
     {
         $firstCommitHash = $this->getFirstCommitHashCode($file);
         $unixTimeStamp = shell_exec('git show -s --format="%at" ' .$firstCommitHash);
-        return preg_replace('/\s+/', '', $unixTimeStamp);
+
+        // Strip whitespace and cast to int
+        return (int)preg_replace('/\s+/', '', $unixTimeStamp);
     }
     // Split the output of gitDiff into an array
     public function splitOnNewLine($file_names)
