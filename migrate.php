@@ -165,11 +165,11 @@ class Migrate {
         $fileNamesArray = $this->splitOnNewLine($fileNames);
         $newFiles = $this->filterByStatus('A', $fileNamesArray);
         $statusTrimmed = $this->stripStatus($newFiles);
-        $prefixedAssoc = $this->sortByKey($this->mapFilePrefix($statusTrimmed));
+        $prefixedAssoc = $this->sortByKey($this->mapTimeStampToKey($statusTrimmed));
         $this->runScripts($prefixedAssoc);
     }
 }
 
-//$migrate = new Migrate();
-//$migrate->init();
+$migrate = new Migrate();
+$migrate->init();
 ?>
