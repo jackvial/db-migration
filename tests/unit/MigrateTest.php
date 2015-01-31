@@ -116,10 +116,28 @@ class MigrateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->migrate->getFirstCommitHashCode($file_name), $expected_result);
     }
 
-    public function testGetFileFirstCommitDate()
+    public function testGetFileFirstCommitDateDropFruit()
+    {
+        $file_name = 'test_includes/drop_fruit.sql';
+        $expected_result = '1422637962';
+
+        $this->assertInternalType('string', $this->migrate->GetFileFirstCommitDate($file_name));
+        $this->assertEquals($this->migrate->GetFileFirstCommitDate($file_name), $expected_result);
+    }
+
+    public function testGetFileFirstCommitDateInsertFruit()
     {
         $file_name = 'test_includes/insert_fruit.sql';
         $expected_result = '1422637654';
+
+        $this->assertInternalType('string', $this->migrate->GetFileFirstCommitDate($file_name));
+        $this->assertEquals($this->migrate->GetFileFirstCommitDate($file_name), $expected_result);
+    }
+
+    public function testGetFileFirstCommitDateUpdateFruit()
+    {
+        $file_name = 'test_includes/update_fruit.sql';
+        $expected_result = '1422637962';
 
         $this->assertInternalType('string', $this->migrate->GetFileFirstCommitDate($file_name));
         $this->assertEquals($this->migrate->GetFileFirstCommitDate($file_name), $expected_result);
@@ -132,9 +150,9 @@ class MigrateTest extends \PHPUnit_Framework_TestCase
                             'test_includes/insert_fruit.sql',
                             'test_includes/update_fruit.sql');
 
-        $expected_result =  array(14226376540 => 'test_includes/drop_fruit.sql',
-                                14226376541 => 'test_includes/insert_fruit.sql',
-                                14226376542 => 'test_includes/update_fruit.sql');
+        $expected_result =  array(  14226379620 => 'test_includes/drop_fruit.sql',
+                                    14226376541 => 'test_includes/insert_fruit.sql',
+                                    14226379622 => 'test_includes/update_fruit.sql');
 
         $this->assertEquals($this->migrate->mapTimeStampToKey($file_names), $expected_result);
     }
