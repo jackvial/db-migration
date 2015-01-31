@@ -20,7 +20,7 @@ class MigrateTest extends \PHPUnit_Framework_TestCase
 
     public function testGitDiff()
     {
-        // Testing test includes
+        // Testing test includes again
         $test_directory = 'test_includes/';
         $expected_result = 'Mtest_includes/drop_fruit.sqlMtest_includes/insert_fruit.sqlMtest_includes/update_fruit.sql';
 
