@@ -25,9 +25,9 @@ class Migrate {
      *  where "A" is added,  "D" is deleted and "M" is modified
      */
 
-    public function gitDiff()
+    public function gitDiff($directory_path)
     {
-        return shell_exec('git diff HEAD^ HEAD --name-status includes/');
+        return shell_exec('git diff HEAD^ HEAD --name-status ' . $directory_path);
     }
 
     public function getFirstCommitHashCode($file)
@@ -161,7 +161,8 @@ class Migrate {
 
     public function init()
     {
-        $fileNames = $this->gitDiff();
+        $migration_directory = 'includes/';
+        $fileNames = $this->gitDiff($migration_directory);
         $fileNamesArray = $this->splitOnNewLine($fileNames);
         $newFiles = $this->filterByStatus('A', $fileNamesArray);
         $statusTrimmed = $this->stripStatus($newFiles);
