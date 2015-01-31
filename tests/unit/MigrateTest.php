@@ -142,7 +142,7 @@ class MigrateTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('string', $this->migrate->GetFileFirstCommitDate($file_name));
         $this->assertEquals($this->migrate->GetFileFirstCommitDate($file_name), $expected_result);
     }
-
+    
     public function testMapTimeStampToKey()
     {
 
