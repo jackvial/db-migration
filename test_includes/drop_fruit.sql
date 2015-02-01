@@ -1,1 +1,1 @@
-testing drop fruit
+INSERT INTO fruit (name, color) VALUES ('plum', 4165);
