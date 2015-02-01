@@ -22,13 +22,12 @@ class MigrateTest extends \PHPUnit_Framework_TestCase
     {
         // Testing test includesit 
         $test_directory = 'test_includes/';
-        $expected_result = 'Mtest_includes/drop_fruit.sqlMtest_includes/insert_fruit.sqlMtest_includes/update_fruit.sql';
 
         // Make sure a string is returned
         $this->assertTrue(is_string($this->migrate->gitDiff($test_directory)));
 
         // Strip all the hidden characters since we are only testing that the file names match
-        $this->assertEquals(preg_replace('/[\n\r\s]+/', '', $this->migrate->gitDiff($test_directory)), $expected_result);  
+        $this->assertTrue(preg_match_all('#\b(insert|drop|update)\b#', $this->migrate->gitDiff($test_directory)));  
     }
 
     public function testSplitStringReturnsArray()
