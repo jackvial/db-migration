@@ -10,7 +10,7 @@
   *  5. Sort by keys
   *  6. Connect to the database
   *  7. Run each of the scripts against the database
-  *  8. Log that the scripts have been succesfully run or if any errors occurred
+  *  8. Log that the scripts have been successfully run or if any errors occurred
   */
 
 class Migrate {
@@ -46,19 +46,22 @@ class Migrate {
         // Strip whitespace
         return preg_replace('/\s+/', '', $unixTimeStamp);
     }
+
     // Split the output of gitDiff into an array
     public function splitOnNewLine($file_names)
     {
         return preg_split('/[\n\r]+/', $file_names, -1, PREG_SPLIT_NO_EMPTY);
     }
 
-    // Filter by the status letter "A" or "D"
+    // Filter by the status letter "A", "M" or "D"
+    // for "Add", "Modify" and "Delete" respectively
+    // e.g filterByStatus("A") to return all the files that have been added
     public function filterByStatus($status, $filesArray)
     {
         // "use" keyword lets you inherit from the parent scope when defining
         // anonymous functions
         $newFiles = array_filter($filesArray, function($item) use($status){
-            return $item[0] == $status;
+            return $item[0] === $status;
         });
         return $newFiles;
     }
@@ -89,14 +92,11 @@ class Migrate {
     // with the file path as the value
     public function mapFilePrefix($files_array)
     {
-
-        //$data[$item['id']]=$item['label'];
         $prefixes_assoc = array();
         foreach($files_array as $key => $file_name) {
             $prefix = $this->getNumberPrefix($file_name);
             $prefixes_assoc[$prefix] = $file_name;
         }
-
         return $prefixes_assoc;
     }
 
@@ -112,14 +112,13 @@ class Migrate {
             $timeStamp = (int)$timeStamp . (string)$key;
             $timestamps_assoc[$timeStamp] = $file_name;
         }
-
         return $timestamps_assoc;
     }
 
     // Sort by key to get chronological order
     public function sortBykey($assocArray)
     {
-        // Sport assoc array in place, returns boolean
+        // Sort assoc array in place, returns boolean
         ksort($assocArray, SORT_NUMERIC);
         return $assocArray;
     }
@@ -128,14 +127,11 @@ class Migrate {
     public function connectToDb()
     {
         try {
-
             $conn = new PDO('mysql:host=localhost;dbname=migration_scripts', 'root', 'Welcome1');
-    
         } catch (PDOException $e) {
             print "Error!: " . $e->getMessage() . "<br/>";
             die();
         }
-
         $this->dbconn = $conn;
     }
 
@@ -151,8 +147,6 @@ class Migrate {
         $dbConn = $this->getConnection();
         foreach($files as $key => $fileName) {
             $result = $dbConn->query(file_get_contents($fileName));
-            print_r($result);
-
             $date = new DateTime();
             $date = (string)$date->format('Y-m-d H:i:s');
             file_put_contents("migration_log.txt", $date ."    ". $fileName."\n", FILE_APPEND);      
@@ -161,10 +155,10 @@ class Migrate {
 
     public function init()
     {
-        $migration_directory = 'includes/';
+        $migration_directory = 'test_includes/';
         $fileNames = $this->gitDiff($migration_directory);
         $fileNamesArray = $this->splitOnNewLine($fileNames);
-        $newFiles = $this->filterByStatus('A', $fileNamesArray);
+        $newFiles = $this->filterByStatus('M', $fileNamesArray);
         $statusTrimmed = $this->stripStatus($newFiles);
         $prefixedAssoc = $this->sortByKey($this->mapTimeStampToKey($statusTrimmed));
         $this->runScripts($prefixedAssoc);

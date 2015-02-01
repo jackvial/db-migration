@@ -5,11 +5,12 @@
 # Copy this file to ".git/hooks/" to generate new files for testing
 
 # Remove the files if they exist
-filesArray=(test_includes/drop_fruit.sql test_includes/insert_fruit.sql test_includes/update_fruit.sql)
+filesArray=("test_includes/drop_fruit{$RANDOM}.sql" "test_includes/insert_fruit{$RANDOM}.sql" "test_includes/update_fruit{$RANDOM}.sql")
 
+# Delete all the files
+rm -f test_includes/*
 for path in "${filesArray[@]}"
 do
-  rm -f $path
   touch $path
   echo "INSERT INTO fruit (name, color) VALUES ('plum', $RANDOM);" >> $path
 done
