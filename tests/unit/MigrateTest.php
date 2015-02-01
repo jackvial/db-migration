@@ -110,8 +110,8 @@ class MigrateTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFirstCommitHashCode()
     {
-        $file_name = 'test_includes/insert_fruit.sql';
-        $expected_result = '1f56022dee94fbe7b041acfd38d77837e847fab5';
+        $file_name = 'test_includes_fixed/insert_fruit.sql';
+        $expected_result = 'b9b7a39c4d1aafe228c2b673d75f8ea350919da0';
 
         $this->assertEquals($this->migrate->getFirstCommitHashCode($file_name), $expected_result);
     }
@@ -119,7 +119,7 @@ class MigrateTest extends \PHPUnit_Framework_TestCase
     public function testGetFileFirstCommitDateDropFruit()
     {
         $file_name = 'test_includes_fixed/drop_fruit.sql';
-        $expected_result = '1422637962';
+        $expected_result = '1422756672';
 
         $this->assertInternalType('string', $this->migrate->GetFileFirstCommitDate($file_name));
         $this->assertEquals($this->migrate->GetFileFirstCommitDate($file_name), $expected_result);
@@ -128,7 +128,7 @@ class MigrateTest extends \PHPUnit_Framework_TestCase
     public function testGetFileFirstCommitDateInsertFruit()
     {
         $file_name = 'test_includes_fixed/insert_fruit.sql';
-        $expected_result = '1422637654';
+        $expected_result = '1422756672';
 
         $this->assertInternalType('string', $this->migrate->GetFileFirstCommitDate($file_name));
         $this->assertEquals($this->migrate->GetFileFirstCommitDate($file_name), $expected_result);
@@ -137,7 +137,7 @@ class MigrateTest extends \PHPUnit_Framework_TestCase
     public function testGetFileFirstCommitDateUpdateFruit()
     {
         $file_name = 'test_includes_fixed/update_fruit.sql';
-        $expected_result = '1422637962';
+        $expected_result = '1422756672';
 
         $this->assertInternalType('string', $this->migrate->GetFileFirstCommitDate($file_name));
         $this->assertEquals($this->migrate->GetFileFirstCommitDate($file_name), $expected_result);
@@ -150,9 +150,9 @@ class MigrateTest extends \PHPUnit_Framework_TestCase
                             'test_includes_fixed/insert_fruit.sql',
                             'test_includes_fixed/update_fruit.sql');
 
-        $expected_result =  array(  14226379620 => 'test_includes_fixed/drop_fruit.sql',
-                                    14226376541 => 'test_includes_fixed/insert_fruit.sql',
-                                    14226379622 => 'test_includes_fixed/update_fruit.sql');
+        $expected_result =  array(  14227566720 => 'test_includes_fixed/drop_fruit.sql',
+                                    14227566721 => 'test_includes_fixed/insert_fruit.sql',
+                                    14227566722 => 'test_includes_fixed/update_fruit.sql');
 
         $this->assertEquals($this->migrate->mapTimeStampToKey($file_names), $expected_result);
     }
