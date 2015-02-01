@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Copy this file to ".git/hooks/" to generate new files for testing
+
+# Remove the files if they exist
+filesArray=(test_includes/drop_fruit.sql test_includes/insert_fruit.sql test_includes/update_fruit.sql)
+
+for path in "${filesArray[@]}"
+do
+  rm -f $path
+  touch $path
+  echo "INSERT INTO fruit (name, color) VALUES ('plum', $RANDOM);" >> $path
+done
+
+# Add the new files to git and commit along with the commit that triggers this hook
+git add -A
