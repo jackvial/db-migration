@@ -1,1 +1,1 @@
-INSERT INTO fruit (name, color) VALUES ('plum', 11379);
+INSERT INTO fruit (name, color) VALUES ('plum', 15307);
