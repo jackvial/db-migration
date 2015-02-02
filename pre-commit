@@ -3,9 +3,12 @@
 # This script creates new test files with new random modifications 
 # before every commit so that Migrate->gitDiff can be tested
 # Copy this file to ".git/hooks/" to generate new files for testing
+randomOne=$RANDOM
+randomTwo=$RANDOM
+randomThree=$RANDOM
 
 # Remove the files if they exist
-filesArray=("test_includes/drop_fruit{$RANDOM}.sql" "test_includes/insert_fruit{$RANDOM}.sql" "test_includes/update_fruit{$RANDOM}.sql")
+filesArray=("test_includes/drop_fruit_$randomOne.sql" "test_includes/insert_fruit_$randomTwo.sql" "test_includes/update_fruit_$randomThree.sql")
 
 # Delete all the files
 rm -f test_includes/*
