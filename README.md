@@ -1,23 +1,15 @@
-DB Migration Script [![Build Status](https://travis-ci.org/jackvial/db-migration.svg)](https://travis-ci.org/jackvial/db-migration)
-===================================================================================================================================
-- Performs a git diff on your migartions directory and only runs new scripts
-- Can be triggered by a git hook such as post-receive 
+Post Merge DB Migration Hook [![Build Status](https://travis-ci.org/jackvial/db-migration.svg)](https://travis-ci.org/jackvial/db-migration)
+=====================================================================================================================
+### How to Use
+- Copy migrate.php, rename it to to post-merge and move the file to ./git/hooks
+- Configure the path to your migration directory
+- Configure your database connection
 
-### Setup
-Run: 
+### Running the Unit Tests
+Run from the root directory
 ```bash 
 composer install
 ```
-### Run Tests
-Run: 
 ```bash
 vendors/bin/codecept run
-``` 
-from the project root directory.
-
-
-### Naming Migration Files
-All migration files must be prefixed with a number so that they run in the correct order:
-```bash 
-includes/22_migration_script.sql
 ```
