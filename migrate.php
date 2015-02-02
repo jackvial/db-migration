@@ -127,7 +127,7 @@ class Migrate {
     public function connectToDb()
     {
         try {
-            $conn = new PDO('mysql:host=localhost;dbname=migration_scripts', 'root', 'Welcome1');
+            $conn = new PDO('mysql:host=localhost;dbname=migration_scripts', '', '');
         } catch (PDOException $e) {
             print "Error!: " . $e->getMessage() . "<br/>";
             die();
