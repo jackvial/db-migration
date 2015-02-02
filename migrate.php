@@ -147,6 +147,7 @@ class Migrate {
         $dbConn = $this->getConnection();
         foreach($files as $key => $fileName) {
             $result = $dbConn->query(file_get_contents($fileName));
+            print_r($result);
             $date = new DateTime();
             $date = (string)$date->format('Y-m-d H:i:s');
             file_put_contents("migration_log.txt", $date ."    ". $fileName."\n", FILE_APPEND);      
@@ -158,7 +159,8 @@ class Migrate {
         $migration_directory = 'test_includes/';
         $fileNames = $this->gitDiff($migration_directory);
         $fileNamesArray = $this->splitOnNewLine($fileNames);
-        $newFiles = $this->filterByStatus('M', $fileNamesArray);
+        print_r($fileNamesArray);
+        $newFiles = $this->filterByStatus('A', $fileNamesArray);
         $statusTrimmed = $this->stripStatus($newFiles);
         $prefixedAssoc = $this->sortByKey($this->mapTimeStampToKey($statusTrimmed));
         $this->runScripts($prefixedAssoc);
